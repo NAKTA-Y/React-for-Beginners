@@ -1,33 +1,30 @@
 import { useState, useEffect } from "react";
 
-function Hello() {
-  function byFn() {
-    console.log("bye");
-  }
-
-  function hiFn() {
-    console.log("hi");
-    return byFn;
-  }
-
-  useEffect(hiFn, []);
-
-  return <h1>Hello</h1>
-}
-
 function App() {
-  const [showing, setShowing] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [coins, setCoins] = useState([])
 
-  const onClick = () => {
-    setShowing(prev => !prev);
-  }
+  useEffect(() => {
+    fetch("https://api.coinpaprika.com/v1/tickers")
+    .then((response) => response.json())
+    .then((json) => {
+      setCoins(json);
+      setLoading(false);
+    });
+  }, [])
 
   return (
     <div>
-      <button onClick={onClick}>{showing ? "Hide" : "Show"}</button>
-      {showing ? <Hello /> : null}
+      <h1>The Coins! {loading ? "" : `(${coins.length})`}</h1>
+      {loading ? <strong>Loading...</strong> : null}
+      <select>
+        {coins.map((coin, index) => 
+          <option key={index}>{coin.name} ({coin.symbol}): ${Math.round(coin.quotes.USD.price * 1000) / 1000} USD</option>
+        )}
+      </select>
+
     </div>
-  );
+  )
 }
 
 export default App;
