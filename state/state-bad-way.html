@@ -18,10 +18,10 @@
 
     function counterUp() {
         counter++;
-        reRender();
+        render();
     }
 
-    function reRender() {
+    function render() {
         ReactDOM.render(<Container/>, root);
     }
 
@@ -31,7 +31,6 @@
         <button onClick={counterUp}>Click Me!</button>
     </div>
     );
-
-    ReactDOM.render(<Container/>, root);
+    render();
 </script>
 </html>
